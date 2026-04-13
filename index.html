@@ -27,7 +27,6 @@
       -webkit-font-smoothing: none;
       font-smooth: never;
     }
-    /* Force pixelated text on absolutely everything */
     body, div, span, p, h1, h2, h3, h4, button, .window, .start-menu-item, .taskbar-time, .taskbar-app-btn, .boot-text, .btn, canvas, svg, img {
       -webkit-font-smoothing: none !important;
       font-smooth: never !important;
@@ -215,15 +214,23 @@
       background: #000080;
       color: white;
     }
-    .start-menu-item img {
-      width: 38px;
-      height: 38px;
-      margin-right: 18px;
-      image-rendering: pixelated;
-    }
-    .start-menu-item.ie-icon img {
+    .start-menu-item img, .start-menu-item .symbol-icon {
       width: 44px;
       height: 44px;
+      margin-right: 18px;
+      image-rendering: pixelated;
+      object-fit: contain;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      font-weight: bold;
+      color: black;
+      text-shadow: 2px 2px 0 white;
+    }
+    .start-menu-item.ie-icon img {
+      width: 48px;
+      height: 48px;
     }
     .divider {
       height: 4px;
@@ -306,7 +313,7 @@
     /* Desktop icons — blocky */
     .desktop-icon {
       position: absolute;
-      width: 100px;
+      width: 110px;
       text-align: center;
       color: white;
       text-shadow: 3px 3px 0 #000;
@@ -316,14 +323,35 @@
       padding: 8px;
       image-rendering: pixelated;
     }
-    .desktop-icon img {
-      width: 64px;
-      height: 64px;
-      image-rendering: pixelated;
-    }
-    .desktop-icon.ie-big img {
+    .desktop-icon img, .desktop-icon .symbol-icon {
       width: 72px;
       height: 72px;
+      image-rendering: pixelated;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 4px;
+    }
+    .desktop-icon .symbol-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 4px 4px 0 #000;
+      background: transparent;
+    }
+    .desktop-icon.ie-big img {
+      width: 80px;
+      height: 80px;
+    }
+    /* My Computer icon — slightly bigger than others, but not huge (100px) */
+    .desktop-icon.my-pc {
+      width: 130px;
+    }
+    .desktop-icon.my-pc img {
+      width: 100px !important;
+      height: 100px !important;
     }
 
     /* Update loader */
@@ -361,12 +389,34 @@
       border-color: #808080 #ffffff #ffffff #808080;
     }
 
-    /* Global pixelation enforcement */
-    body, button, div, span, p, h3, h4, .taskbar-time, .start-menu-item, .window-title, .boot-text, .btn, .taskbar-app-btn, canvas, svg {
-      -webkit-font-smoothing: none !important;
-      -moz-osx-font-smoothing: unset !important;
-      font-smooth: never !important;
-      image-rendering: pixelated !important;
+    /* Context Menu — pixel perfect */
+    #context-menu {
+      position: fixed;
+      background: #c0c0c0;
+      border: 4px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: 4px 4px 0 #000;
+      padding: 4px 0;
+      z-index: 3000;
+      min-width: 200px;
+      display: none;
+      image-rendering: pixelated;
+    }
+    .context-menu-item {
+      padding: 8px 24px;
+      font-size: 18px;
+      cursor: pointer;
+      image-rendering: pixelated;
+    }
+    .context-menu-item:hover {
+      background: #000080;
+      color: white;
+    }
+    .context-divider {
+      height: 3px;
+      background: #808080;
+      border-bottom: 3px solid #ffffff;
+      margin: 4px 0;
     }
   </style>
 </head>
@@ -386,22 +436,7 @@
 
 <!-- DESKTOP (hidden initially) -->
 <div id="desktop" style="display: none;">
-  <div class="desktop-icon" style="top: 30px; left: 30px;" ondblclick="openThisPC()">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Crect x='4' y='12' width='24' height='16' fill='%23ffffff' stroke='%23000'/%3E%3C/svg%3E" alt="My Computer">
-    <div>My Computer</div>
-  </div>
-  <div class="desktop-icon" style="top: 30px; left: 140px;" ondblclick="openPaint()">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ff0000'/%3E%3C/svg%3E" alt="Paint">
-    <div>Paint</div>
-  </div>
-  <div class="desktop-icon ie-big" style="top: 30px; left: 260px;" ondblclick="openIE()">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ctext x='4' y='26' fill='blue' font-size='28' font-weight='bold'%3Ee%3C/text%3E%3C/svg%3E" alt="Internet">
-    <div>Internet</div>
-  </div>
-  <div class="desktop-icon" style="top: 30px; left: 390px;" ondblclick="openGames()">
-    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Cpolygon points='8,8 24,12 24,20 8,24' fill='green'/%3E%3C/svg%3E" alt="Games">
-    <div>Games</div>
-  </div>
+  <!-- Icons populated dynamically -->
 </div>
 
 <!-- TASKBAR -->
@@ -416,13 +451,23 @@
 
 <!-- START MENU -->
 <div id="start-menu">
-  <div class="start-menu-item" onclick="openThisPC()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Crect x='4' y='12' width='24' height='16' fill='%23fff'/%3E%3C/svg%3E">This PC</div>
-  <div class="start-menu-item" onclick="openPaint()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ff0000'/%3E%3C/svg%3E">Paint</div>
-  <div class="start-menu-item ie-icon" onclick="openIE()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ctext x='4' y='26' fill='blue' font-size='28' font-weight='bold'%3Ee%3C/text%3E%3C/svg%3E">Internet Explorer</div>
-  <div class="start-menu-item" onclick="openGames()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Cpolygon points='8,8 24,12 24,20 8,24' fill='green'/%3E%3C/svg%3E">Games</div>
+  <div class="start-menu-item" onclick="openThisPC()"><img src="https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/tumblr_fda654985437a7b2664e5833e086c69b_43cf0d59_540.png" alt="This PC">This PC</div>
+  <div class="start-menu-item" onclick="openPaint()"><span class="symbol-icon" style="font-size:42px;">℗</span>Paint</div>
+  <div class="start-menu-item ie-icon" onclick="openIE()"><img src="https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/Internet_Explorer_1997_Icon_Beta_256.webp" alt="Internet Explorer">Internet Explorer</div>
+  <div class="start-menu-item" onclick="openGames()"><span class="symbol-icon" style="font-size:42px;">⁜</span>Games</div>
   <div class="divider"></div>
   <div class="start-menu-item" onclick="openSettings()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23808080'/%3E%3C/svg%3E">Settings</div>
   <div class="start-menu-item" onclick="shutDown()">Shut Down...</div>
+</div>
+
+<!-- CONTEXT MENU -->
+<div id="context-menu">
+  <div class="context-menu-item" onclick="contextAction('arrange')">Arrange Icons</div>
+  <div class="context-menu-item" onclick="contextAction('refresh')">Refresh</div>
+  <div class="context-divider"></div>
+  <div class="context-menu-item" onclick="contextAction('new')">New</div>
+  <div class="context-divider"></div>
+  <div class="context-menu-item" onclick="contextAction('properties')">Properties</div>
 </div>
 
 <script>
@@ -435,6 +480,73 @@
     const desktop = document.getElementById('desktop');
     const startMenu = document.getElementById('start-menu');
     const startBtn = document.getElementById('start-button');
+    const contextMenu = document.getElementById('context-menu');
+
+    function createDesktopIcon(left, top, title, content, dblclickHandler, extraClass = '') {
+      const icon = document.createElement('div');
+      icon.className = 'desktop-icon' + (extraClass ? ' ' + extraClass : '');
+      icon.style.left = left + 'px';
+      icon.style.top = top + 'px';
+      
+      if (typeof content === 'string' && (content.startsWith('http') || content.startsWith('data:'))) {
+        icon.innerHTML = `<img src="${content}" alt="${title}"><div>${title}</div>`;
+      } else {
+        icon.innerHTML = `<div class="symbol-icon">${content}</div><div>${title}</div>`;
+      }
+      
+      icon.addEventListener('dblclick', dblclickHandler);
+      desktop.appendChild(icon);
+      return icon;
+    }
+
+    function initDesktopIcons() {
+      // My Computer – 100px (slightly bigger)
+      createDesktopIcon(20, 20, 'My Computer', 
+        'https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/tumblr_fda654985437a7b2664e5833e086c69b_43cf0d59_540.png',
+        openThisPC, 'my-pc');
+      
+      // Paint – symbol ℗
+      createDesktopIcon(150, 20, 'Paint', '℗', openPaint);
+      
+      // Internet Explorer
+      createDesktopIcon(270, 20, 'Internet',
+        'https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/Internet_Explorer_1997_Icon_Beta_256.webp',
+        openIE, 'ie-big');
+      
+      // Games – symbol ⁜
+      createDesktopIcon(400, 20, 'Games', '⁜', openGames);
+    }
+
+    window.contextAction = function(action) {
+      contextMenu.style.display = 'none';
+      switch(action) {
+        case 'arrange':
+          alert('Arrange Icons (simulated)');
+          break;
+        case 'refresh':
+          location.reload();
+          break;
+        case 'new':
+          createDesktopIcon(
+            30 + document.querySelectorAll('.desktop-icon').length * 20, 
+            150, 
+            'New File.txt', 
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Crect x='6' y='4' width='20' height='24' fill='white' stroke='%23000'/%3E%3C/svg%3E",
+            () => alert('New text file (double-click simulated)')
+          );
+          break;
+        case 'properties':
+          const html = `
+            <div style="padding:10px;">
+              <h3>System Properties</h3>
+              <p>Microsoft Windows 95<br>4.00.950 B<br>Registered to: Pixel User</p>
+              <p>Computer: Pentium(r)<br>128.0 MB RAM</p>
+            </div>
+          `;
+          createWindow('System Properties', html, 400, 300);
+          break;
+      }
+    };
 
     function getIconForTitle(title) {
       if (title.includes('This PC')) return '💻';
@@ -672,7 +784,7 @@
         noBtn.disabled = true;
         
         let progress = 0;
-        const duration = 20000 + Math.random() * 100000; // 20-120 sec
+        const duration = 20000 + Math.random() * 100000;
         const interval = 200;
         const steps = duration / interval;
         const increment = 100 / steps;
@@ -744,6 +856,7 @@
           setTimeout(() => {
             bootScreen.style.display = 'none';
             desktop.style.display = 'block';
+            initDesktopIcons();
             updateClock();
             setInterval(updateClock, 1000);
           }, 500);
@@ -771,7 +884,22 @@
       if (!startBtn.contains(e.target) && !startMenu.contains(e.target)) {
         startMenu.style.display = 'none';
       }
+      if (!contextMenu.contains(e.target)) {
+        contextMenu.style.display = 'none';
+      }
     });
+
+    desktop.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      const x = e.clientX;
+      const y = e.clientY;
+      contextMenu.style.left = x + 'px';
+      contextMenu.style.top = y + 'px';
+      contextMenu.style.display = 'block';
+    });
+
+    window.addEventListener('scroll', () => contextMenu.style.display = 'none');
+    window.addEventListener('resize', () => contextMenu.style.display = 'none');
 
   })();
 </script>
