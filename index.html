@@ -345,7 +345,7 @@
       width: 80px;
       height: 80px;
     }
-    /* My Computer icon — slightly bigger than others, but not huge (100px) */
+    /* My Computer icon — slightly bigger than others (100px) */
     .desktop-icon.my-pc {
       width: 130px;
     }
@@ -422,10 +422,11 @@
 </head>
 <body>
 
-<!-- BOOT SCREEN -->
+<!-- BOOT SCREEN — no "Windows 95" text -->
 <div id="boot-screen">
   <div class="boot-logo">
-    <svg viewBox="0 0 200 50" width="100%" style="image-rendering: pixelated;"><text x="10" y="40" fill="white" font-family="'Microsoft Sans Serif', monospace" font-weight="bold" font-size="38">Windows 95</text></svg>
+    <!-- Empty SVG – text removed -->
+    <svg viewBox="0 0 200 50" width="100%" style="image-rendering: pixelated;"></svg>
   </div>
   <div class="boot-bar-container">
     <div class="boot-bar-fill" id="boot-bar-fill"></div>
