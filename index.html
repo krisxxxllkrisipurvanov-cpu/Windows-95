@@ -1,1 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Windows 95 • BIG PIXEL</title>
+  <style>
+    /* ─── ABSOLUTE PIXELATION — EVERYTHING CHUNKY ─── */
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+      -webkit-font-smoothing: none !important;
+      -moz-osx-font-smoothing: unset !important;
+      font-smooth: never !important;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Microsoft Sans Serif', 'MS Sans Serif', 'Pixelated MS Sans Serif', 'Courier New', monospace;
+      background: #008080;
+      image-rendering: pixelated;
+      -webkit-font-smoothing: none;
+      font-smooth: never;
+    }
+    /* Force pixelated text on all elements */
+    body, div, span, p, h1, h2, h3, h4, button, .window, .start-menu-item, .taskbar-time, .taskbar-app-btn, .boot-text, .btn {
+      -webkit-font-smoothing: none !important;
+      font-smooth: never !important;
+      font-weight: normal;
+    }
 
+    /* ─── BIGGER PIXEL BOOT ─── */
+    #boot-screen {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-family: inherit;
+      image-rendering: pixelated;
+    }
+    .boot-logo {
+      width: 480px;
+      max-width: 90%;
+      margin-bottom: 40px;
+      filter: drop-shadow(0 0 12px #008080);
+      image-rendering: pixelated;
+    }
+    .boot-bar-container {
+      width: 400px;
+      max-width: 80%;
+      height: 32px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      padding: 3px;
+      margin: 25px 0;
+    }
+    .boot-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: #000080;
+      transition: width 0.15s linear;
+    }
+    .boot-text {
+      color: #c0c0c0;
+      font-size: 18px;
+      margin-top: 15px;
+    }
+    .boot-start-btn {
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 12px 40px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #000;
+      cursor: pointer;
+      margin-top: 40px;
+      box-shadow: 3px 3px 0 #000;
+      font-family: inherit;
+      image-rendering: pixelated;
+    }
+    .boot-start-btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+
+    /* ─── DESKTOP — pixelated wallpaper (bigger pixels via scaling) ─── */
+    #desktop {
+      position: relative;
+      width: 100%;
+      height: calc(100% - 48px);
+      background-image: url('https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/zge85fc9j0g11.jpg');
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    /* ─── TASKBAR — thicker borders, bigger elements ─── */
+    #taskbar {
+      position: fixed;
+      bottom: 0; left: 0; width: 100%; height: 48px;
+      background: #c0c0c0;
+      border-top: 3px solid #ffffff;
+      box-shadow: 0 -3px 0 #808080;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      z-index: 1000;
+      image-rendering: pixelated;
+    }
+    .start-button {
+      display: flex;
+      align-items: center;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 4px 16px 4px 8px;
+      height: 38px;
+      font-weight: bold;
+      font-size: 20px;
+      margin-right: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .start-button img {
+      width: 26px;
+      height: 26px;
+      margin-right: 8px;
+      image-rendering: pixelated;
+    }
+    .start-button:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+
+    .taskbar-apps {
+      display: flex;
+      flex: 1;
+      height: 42px;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 3px 0;
+    }
+    .taskbar-app-btn {
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 0 16px;
+      height: 36px;
+      min-width: 160px;
+      max-width: 200px;
+      font-weight: bold;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: inset -2px -2px 0 #808080;
+      image-rendering: pixelated;
+    }
+    .taskbar-app-btn.active {
+      border-color: #808080 #ffffff #ffffff #808080;
+      background: #a0a0a0;
+      box-shadow: inset 2px 2px 0 #404040;
+    }
+
+    .taskbar-time {
+      margin-left: auto;
+      margin-right: 16px;
+      padding: 6px 16px;
+      border: 3px solid;
+      border-color: #808080 #ffffff #ffffff #808080;
+      background: #c0c0c0;
+      font-size: 18px;
+      flex-shrink: 0;
+      image-rendering: pixelated;
+    }
+
+    /* ─── START MENU — chunkier ─── */
+    #start-menu {
+      position: fixed;
+      bottom: 52px;
+      left: 8px;
+      width: 260px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      display: none;
+      z-index: 2000;
+      padding: 6px 0;
+      box-shadow: 4px 4px 0 #000;
+      image-rendering: pixelated;
+    }
+    .start-menu-item {
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      cursor: pointer;
+      image-rendering: pixelated;
+    }
+    .start-menu-item:hover {
+      background: #000080;
+      color: white;
+    }
+    .start-menu-item img {
+      width: 34px;
+      height: 34px;
+      margin-right: 16px;
+      image-rendering: pixelated;
+    }
+    .start-menu-item.ie-icon img {
+      width: 40px;
+      height: 40px;
+    }
+    .divider {
+      height: 3px;
+      background: #808080;
+      border-bottom: 3px solid #ffffff;
+      margin: 6px 0;
+    }
+
+    /* ─── WINDOW — thicker pixel borders, bolder ─── */
+    .window {
+      position: absolute;
+      min-width: 340px;
+      min-height: 240px;
+      background: #c0c0c0;
+      border: 4px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      box-shadow: 4px 4px 0 #000;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      image-rendering: pixelated;
+    }
+    .window-title-bar {
+      background: #000080;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      cursor: move;
+      border-bottom: 3px solid #808080;
+    }
+    .window-title {
+      flex: 1;
+      margin-left: 6px;
+    }
+    .window-controls {
+      display: flex;
+      gap: 6px;
+    }
+    .win-btn {
+      width: 28px;
+      height: 28px;
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      font-weight: bold;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      cursor: pointer;
+      color: #000;
+    }
+    .win-btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+    .window-content {
+      padding: 16px;
+      flex: 1;
+      background: #c0c0c0;
+      overflow: auto;
+      font-size: 16px;
+    }
+
+    /* Paint canvas — pixelated drawing */
+    #paint-canvas {
+      background: white;
+      border: 3px inset #808080;
+      cursor: crosshair;
+      width: 100%;
+      height: auto;
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+    }
+    .paint-tools {
+      margin-bottom: 12px;
+    }
+
+    /* Desktop icons — bigger pixels */
+    .desktop-icon {
+      position: absolute;
+      width: 96px;
+      text-align: center;
+      color: white;
+      text-shadow: 2px 2px 0 #000;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      padding: 6px;
+      image-rendering: pixelated;
+    }
+    .desktop-icon img {
+      width: 56px;
+      height: 56px;
+      image-rendering: pixelated;
+    }
+    .desktop-icon.ie-big img {
+      width: 64px;
+      height: 64px;
+    }
+
+    /* Games update loader */
+    .update-loader {
+      margin-top: 20px;
+      padding: 14px;
+      border: 3px inset #808080;
+      background: #c0c0c0;
+      display: none;
+    }
+    .progress-bar {
+      height: 28px;
+      background: #c0c0c0;
+      border: 3px inset #808080;
+      margin: 12px 0;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: #000080;
+    }
+    .btn {
+      background: #c0c0c0;
+      border: 3px solid;
+      border-color: #ffffff #808080 #808080 #ffffff;
+      padding: 8px 20px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-right: 12px;
+      font-family: inherit;
+      image-rendering: pixelated;
+    }
+    .btn:active {
+      border-color: #808080 #ffffff #ffffff #808080;
+    }
+
+    /* Force pixelated text everywhere */
+    body, button, div, span, p, h3, h4, .taskbar-time, .start-menu-item, .window-title, .boot-text, .btn, .taskbar-app-btn {
+      -webkit-font-smoothing: none !important;
+      -moz-osx-font-smoothing: unset !important;
+      font-smooth: never !important;
+    }
+  </style>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+  <div class="boot-logo">
+    <svg viewBox="0 0 200 50" width="100%" style="image-rendering: pixelated;"><text x="10" y="38" fill="white" font-family="'Microsoft Sans Serif', monospace" font-weight="bold" font-size="34">Windows 95</text></svg>
+  </div>
+  <div class="boot-bar-container">
+    <div class="boot-bar-fill" id="boot-bar-fill"></div>
+  </div>
+  <div class="boot-text" id="boot-status">Starting Windows 95...</div>
+  <button class="boot-start-btn" id="boot-start-btn">Click to boot</button>
+</div>
+
+<!-- DESKTOP (hidden initially) -->
+<div id="desktop" style="display: none;">
+  <!-- Desktop Icons -->
+  <div class="desktop-icon" style="top: 25px; left: 25px;" ondblclick="openThisPC()">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Crect x='4' y='12' width='24' height='16' fill='%23ffffff' stroke='%23000'/%3E%3C/svg%3E" alt="My Computer">
+    <div>My Computer</div>
+  </div>
+  <div class="desktop-icon" style="top: 25px; left: 130px;" ondblclick="openPaint()">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ff0000'/%3E%3C/svg%3E" alt="Paint">
+    <div>Paint</div>
+  </div>
+  <div class="desktop-icon ie-big" style="top: 25px; left: 240px;" ondblclick="openIE()">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ctext x='4' y='26' fill='blue' font-size='28' font-weight='bold'%3Ee%3C/text%3E%3C/svg%3E" alt="Internet">
+    <div>Internet</div>
+  </div>
+  <div class="desktop-icon" style="top: 25px; left: 360px;" ondblclick="openGames()">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Cpolygon points='8,8 24,12 24,20 8,24' fill='green'/%3E%3C/svg%3E" alt="Games">
+    <div>Games</div>
+  </div>
+</div>
+
+<!-- TASKBAR -->
+<div id="taskbar">
+  <div class="start-button" id="start-button">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Cpolygon points='8,8 24,16 8,24' fill='%23000080'/%3E%3C/svg%3E" alt="Start">
+    Start
+  </div>
+  <div class="taskbar-apps" id="taskbar-apps"></div>
+  <div class="taskbar-time" id="taskbar-time"></div>
+</div>
+
+<!-- START MENU -->
+<div id="start-menu">
+  <div class="start-menu-item" onclick="openThisPC()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Crect x='4' y='12' width='24' height='16' fill='%23fff'/%3E%3C/svg%3E">This PC</div>
+  <div class="start-menu-item" onclick="openPaint()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23ff0000'/%3E%3C/svg%3E">Paint</div>
+  <div class="start-menu-item ie-icon" onclick="openIE()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ctext x='4' y='26' fill='blue' font-size='28' font-weight='bold'%3Ee%3C/text%3E%3C/svg%3E">Internet Explorer</div>
+  <div class="start-menu-item" onclick="openGames()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Cpolygon points='8,8 24,12 24,20 8,24' fill='green'/%3E%3C/svg%3E">Games</div>
+  <div class="divider"></div>
+  <div class="start-menu-item" onclick="openSettings()"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23c0c0c0'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23808080'/%3E%3C/svg%3E">Settings</div>
+  <div class="start-menu-item" onclick="shutDown()">Shut Down...</div>
+</div>
+
+<script>
+  (function(){
+    "use strict";
+
+    // ---------- STATE ----------
+    const activeWindows = new Map();
+    let highestZ = 100;
+    const taskbarApps = document.getElementById('taskbar-apps');
+    const desktop = document.getElementById('desktop');
+    const startMenu = document.getElementById('start-menu');
+    const startBtn = document.getElementById('start-button');
+
+    function getIconForTitle(title) {
+      if (title.includes('This PC')) return '💻';
+      if (title.includes('Paint')) return '🎨';
+      if (title.includes('Internet')) return '🌐';
+      if (title.includes('Games')) return '🎮';
+      if (title.includes('Settings')) return '⚙️';
+      return '📁';
+    }
+
+    function addTaskbarButton(win, title) {
+      const btn = document.createElement('div');
+      btn.className = 'taskbar-app-btn';
+      const icon = getIconForTitle(title);
+      btn.innerHTML = `<span style="margin-right:8px;">${icon}</span> ${title}`;
+      
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (win.style.display === 'none') {
+          win.style.display = 'flex';
+          bringToFront(win);
+        } else {
+          win.style.display = 'none';
+        }
+        updateActiveButtonState();
+      });
+      
+      taskbarApps.appendChild(btn);
+      return btn;
+    }
+
+    function updateActiveButtonState() {
+      document.querySelectorAll('.taskbar-app-btn').forEach(btn => btn.classList.remove('active'));
+      for (let [win, data] of activeWindows.entries()) {
+        if (win.style.display !== 'none') {
+          data.button.classList.add('active');
+        }
+      }
+    }
+
+    function removeTaskbarButton(win) {
+      const data = activeWindows.get(win);
+      if (data && data.button) data.button.remove();
+    }
+
+    function bringToFront(win) {
+      highestZ++;
+      win.style.zIndex = highestZ;
+      updateActiveButtonState();
+    }
+
+    function makeDraggable(win, titleBar) {
+      let offsetX, offsetY;
+      titleBar.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('win-btn')) return;
+        bringToFront(win);
+        const rect = win.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+        
+        function onMouseMove(e) {
+          const newLeft = e.clientX - offsetX;
+          const newTop = e.clientY - offsetY;
+          win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, newLeft)) + 'px';
+          win.style.top = Math.max(0, Math.min(window.innerHeight - win.offsetHeight - 48, newTop)) + 'px';
+        }
+        function onMouseUp() {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+        }
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    }
+
+    function createWindow(title, contentHTML, width = 440, height = 340) {
+      const win = document.createElement('div');
+      win.className = 'window';
+      win.style.width = width + 'px';
+      win.style.height = height + 'px';
+      
+      const offset = activeWindows.size * 25;
+      win.style.left = (60 + offset) + 'px';
+      win.style.top = (60 + offset) + 'px';
+      win.style.display = 'flex';
+      
+      const titleBar = document.createElement('div');
+      titleBar.className = 'window-title-bar';
+      titleBar.innerHTML = `
+        <span class="window-title">${title}</span>
+        <div class="window-controls">
+          <div class="win-btn minimize-btn">_</div>
+          <div class="win-btn close-btn">X</div>
+        </div>
+      `;
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'window-content';
+      contentDiv.innerHTML = contentHTML;
+      
+      win.appendChild(titleBar);
+      win.appendChild(contentDiv);
+      desktop.appendChild(win);
+      
+      const button = addTaskbarButton(win, title);
+      activeWindows.set(win, { title, button });
+      
+      bringToFront(win);
+      makeDraggable(win, titleBar);
+      
+      const closeBtn = titleBar.querySelector('.close-btn');
+      closeBtn.addEventListener('click', () => {
+        win.remove();
+        removeTaskbarButton(win);
+        activeWindows.delete(win);
+        updateActiveButtonState();
+      });
+      
+      const minimizeBtn = titleBar.querySelector('.minimize-btn');
+      minimizeBtn.addEventListener('click', () => {
+        win.style.display = 'none';
+        updateActiveButtonState();
+      });
+      
+      win.addEventListener('mousedown', () => bringToFront(win));
+      
+      updateActiveButtonState();
+      return win;
+    }
+
+    // ---------- APPS ----------
+    window.openThisPC = function() {
+      const html = `<div style="padding:12px; font-size:16px;">
+        <div class="pc-icon"><span style="margin-right:16px;">💾</span> 3½ Floppy (A:)</div>
+        <div class="pc-icon"><span style="margin-right:16px;">💻</span> Local Disk (C:)</div>
+        <div class="pc-icon"><span style="margin-right:16px;">📀</span> CD-ROM (D:)</div>
+        <div class="pc-icon"><span style="margin-right:16px;">🖨️</span> Printers</div>
+        <div class="pc-icon"><span style="margin-right:16px;">⚙️</span> Control Panel</div>
+      </div>`;
+      createWindow('This PC', html, 400, 320);
+      startMenu.style.display = 'none';
+    };
+
+    window.openPaint = function() {
+      const html = `
+        <div class="paint-tools">
+          <button class="btn" id="pencil-tool">✏️ Pencil</button>
+          <input type="color" id="paint-color" value="#000000">
+          <button class="btn" id="clear-paint">Clear</button>
+        </div>
+        <canvas id="paint-canvas" width="400" height="240"></canvas>
+      `;
+      const win = createWindow('Paint', html, 480, 380);
+      
+      const canvas = win.querySelector('#paint-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      let painting = false;
+      let color = '#000000';
+      
+      win.querySelector('#paint-color').addEventListener('change', (e) => color = e.target.value);
+      win.querySelector('#clear-paint').addEventListener('click', () => {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      });
+      
+      canvas.addEventListener('mousedown', (e) => { 
+        painting = true; 
+        ctx.beginPath(); 
+        ctx.strokeStyle = color;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.moveTo(x, y);
+      });
+      canvas.addEventListener('mouseup', () => { painting = false; ctx.closePath(); });
+      canvas.addEventListener('mousemove', (e) => {
+        if (!painting) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      });
+      startMenu.style.display = 'none';
+    };
+
+    window.openIE = function() {
+      const html = `
+        <div style="display:flex; flex-direction:column; height:100%;">
+          <div style="border:3px inset; padding:6px; background:white; margin-bottom:12px; font-size:16px;">Address: http://www.microsoft.com</div>
+          <div style="background:white; border:3px inset; padding:20px; flex:1; font-size:16px;">
+            <h3 style="color:red; font-size:20px;">Internet Explorer is out of date.</h3>
+            <p>This version of Internet Explorer is no longer supported. Please update your system.</p>
+          </div>
+        </div>
+      `;
+      createWindow('Internet Explorer', html, 520, 360);
+      startMenu.style.display = 'none';
+    };
+
+    window.openGames = function() {
+      const html = `
+        <div style="text-align:center; padding:24px; font-size:16px;">
+          <h3 style="font-size:22px;">🎮 Games</h3>
+          <p>Your PC does not meet the minimum requirements.<br>Update to Windows Server 2026 to play games.</p>
+          <div style="margin-top:28px;">
+            <button class="btn" id="no-update-btn">No</button>
+            <button class="btn" id="update-btn">Update</button>
+          </div>
+          <div class="update-loader" id="update-loader">
+            <p>Updating to Windows Server 2026...</p>
+            <div class="progress-bar"><div class="progress-fill" id="update-progress"></div></div>
+            <p id="update-status">Please wait...</p>
+          </div>
+        </div>
+      `;
+      const win = createWindow('Games', html, 460, 360);
+      
+      const loaderDiv = win.querySelector('#update-loader');
+      const progressFill = win.querySelector('#update-progress');
+      const updateStatus = win.querySelector('#update-status');
+      const noBtn = win.querySelector('#no-update-btn');
+      const updateBtn = win.querySelector('#update-btn');
+      
+      noBtn.addEventListener('click', () => win.remove());
+      
+      updateBtn.addEventListener('click', () => {
+        loaderDiv.style.display = 'block';
+        updateBtn.disabled = true;
+        noBtn.disabled = true;
+        
+        let progress = 0;
+        const duration = 20000 + Math.random() * 20000;
+        const interval = 200;
+        const steps = duration / interval;
+        const increment = 100 / steps;
+        
+        const timer = setInterval(() => {
+          progress += increment;
+          if (progress >= 100) {
+            progress = 100;
+            progressFill.style.width = '100%';
+            updateStatus.innerText = 'Update complete. Redirecting...';
+            clearInterval(timer);
+            setTimeout(() => {
+              window.location.href = 'https://krisxxxllkrisipurvanov-cpu.github.io/Windows-Server-2026/';
+            }, 800);
+          } else {
+            progressFill.style.width = progress + '%';
+            updateStatus.innerText = `Installing... ${Math.floor(progress)}%`;
+          }
+        }, interval);
+      });
+      startMenu.style.display = 'none';
+    };
+
+    window.openSettings = function() {
+      const html = `
+        <div style="padding:16px; font-size:16px;">
+          <h4 style="font-size:18px;">Control Panel</h4>
+          <div style="display:grid; gap:12px;">
+            <div>🖥️ Display</div>
+            <div>🖱️ Mouse</div>
+            <div>⌨️ Keyboard</div>
+            <div>🌐 Network</div>
+            <div>📅 Date/Time</div>
+          </div>
+        </div>
+      `;
+      createWindow('Settings', html, 340, 290);
+      startMenu.style.display = 'none';
+    };
+
+    window.shutDown = function() {
+      if (confirm('Shut down Windows 95?')) {
+        document.body.innerHTML = '<div style="background:black; color:white; height:100vh; display:flex; align-items:center; justify-content:center; font-size:28px;">It is now safe to turn off your computer.</div>';
+      }
+      startMenu.style.display = 'none';
+    };
+
+    // ---------- BOOT ----------
+    const bootScreen = document.getElementById('boot-screen');
+    const bootBarFill = document.getElementById('boot-bar-fill');
+    const bootStatus = document.getElementById('boot-status');
+    const bootBtn = document.getElementById('boot-start-btn');
+    const bootAudio = new Audio('https://raw.githubusercontent.com/krisxxxllkrisipurvanov-cpu/Windows-95/main/yt1s_WCC0ZQQ.mp3');
+    
+    let bootInterval;
+    let bootProgress = 0;
+
+    function startBootAnimation() {
+      bootBtn.style.display = 'none';
+      bootStatus.innerText = 'Starting Windows 95...';
+      bootInterval = setInterval(() => {
+        bootProgress += 2;
+        bootBarFill.style.width = bootProgress + '%';
+        if (bootProgress >= 30) bootStatus.innerText = 'Loading system drivers...';
+        if (bootProgress >= 60) bootStatus.innerText = 'Preparing desktop...';
+        if (bootProgress >= 100) {
+          clearInterval(bootInterval);
+          bootStatus.innerText = 'Welcome';
+          setTimeout(() => {
+            bootScreen.style.display = 'none';
+            desktop.style.display = 'block';
+            updateClock();
+            setInterval(updateClock, 1000);
+          }, 500);
+        }
+      }, 60);
+    }
+
+    bootBtn.addEventListener('click', () => {
+      bootAudio.play().catch(e => console.log('Audio prevented:', e));
+      startBootAnimation();
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dateStr = now.toLocaleDateString();
+      document.getElementById('taskbar-time').innerText = `${timeStr}  ${dateStr}`;
+    }
+
+    startBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', (e) => {
+      if (!startBtn.contains(e.target) && !startMenu.contains(e.target)) {
+        startMenu.style.display = 'none';
+      }
+    });
+
+  })();
+</script>
+</body>
+</html>
